@@ -18,7 +18,7 @@ const STYLE = `
   .sr { animation: slideRight .28s cubic-bezier(.22,.68,0,1) both; }
   .d1{animation-delay:.05s}.d2{animation-delay:.10s}.d3{animation-delay:.15s}.d4{animation-delay:.20s}.d5{animation-delay:.25s}
   .top-bar { display:flex; align-items:center; justify-content:space-between; padding:16px 16px 12px; border-bottom:1px solid var(--line); flex-shrink:0; }
-  .logo { font-size:18px; font-weight:900; letter-spacing:-.03em; color:var(--ink); }
+  .logo { font-size:17px; font-weight:900; letter-spacing:-.04em; color:var(--blue); }
   .top-icons { display:flex; gap:4px; }
   .icon-btn { width:38px; height:38px; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--ink); border-radius:8px; transition:background .14s; }
   .icon-btn:hover { background:var(--line); }
@@ -415,10 +415,15 @@ const STYLE = `
   .featured-more:hover { color:var(--ink); }
   .featured-scroll { display:flex; gap:7px; padding:0 16px 8px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding-left:16px; scroll-padding-inline-start:16px; }
   .featured-scroll::-webkit-scrollbar { display:none; }
-  .featured-card { flex:0 0 130px; background:var(--white); border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:pointer; transition:all .18s; scroll-snap-align:start; font-family:var(--f); text-align:left; padding:0; }
+  .featured-card { flex:0 0 160px; background:var(--white); border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:pointer; transition:all .18s; scroll-snap-align:start; font-family:var(--f); text-align:left; padding:0; }
   .featured-card:hover { border-color:var(--blue); transform:translateY(-2px); box-shadow:0 10px 22px -14px rgba(0,0,0,.18); }
   .featured-card:active { transform:scale(.985); }
-  .featured-img { width:100%; height:64px; object-fit:cover; background:var(--line); display:block; }
+  .featured-more-card { flex:0 0 auto; background:none; border:none; display:flex; align-items:center; justify-content:center; padding:0 8px; }
+  .featured-more-card:hover { transform:none; box-shadow:none; border:none; }
+  .featured-more-inner { display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--ink3); }
+  .featured-more-count { font-size:13px; font-weight:800; letter-spacing:-.02em; color:var(--ink2); }
+  .featured-more-label { font-size:11px; font-weight:500; white-space:nowrap; }
+  .featured-img { width:100%; height:80px; object-fit:cover; background:var(--line); display:block; }
   .featured-info { padding:6px 9px 8px; }
   .featured-name { font-size:11.5px; font-weight:700; letter-spacing:-.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:1px; color:var(--ink); line-height:1.25; }
   .featured-meta { font-size:10px; color:var(--ink3); margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -519,11 +524,17 @@ const STYLE = `
   .rental-btn:active { transform:scale(.97); }
   .rental-btn.primary { background:#EA580C; color:#fff; border-color:#EA580C; }
   .rental-btn.primary:hover { background:#C2410C; border-color:#C2410C; }
-  .dev-btn { width:44px; height:44px; border-radius:12px; color:#A16207; background:#FEF3C7; border:1.5px solid #FDE68A; position:relative; transition:all .14s; }
-  .dev-btn svg { width:22px; height:22px; stroke-width:2.2; }
-  .dev-btn::after { content:"DEV"; position:absolute; top:-4px; right:-4px; font-size:8px; font-weight:900; color:#422006; background:#FACC15; padding:2px 4px; border-radius:5px; letter-spacing:.06em; box-shadow:0 2px 4px rgba(0,0,0,.16); }
-  .dev-btn:hover { background:#FDE68A; border-color:#FACC15; }
-  .dev-btn:active { transform:scale(.94); }
+  .dev-wrap { display:flex; align-items:center; gap:6px; background:var(--blue-lt); border:1.5px solid #BFDBFE; border-radius:12px; padding:5px 8px 5px 6px; transition:all .14s; }
+  .dev-wrap.off { background:#F3F4F6; border-color:#E5E7EB; }
+  .dev-wrap-label { font-size:10px; font-weight:800; color:var(--blue); letter-spacing:-.01em; white-space:nowrap; }
+  .dev-wrap.off .dev-wrap-label { color:#9CA3AF; }
+  .dev-icon-btn { width:28px; height:28px; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--blue); padding:0; }
+  .dev-wrap.off .dev-icon-btn { color:#9CA3AF; }
+  .dev-icon-btn svg { width:16px; height:16px; stroke-width:2.2; }
+  .dev-toggle { width:34px; height:18px; border-radius:9px; background:var(--blue); border:none; cursor:pointer; position:relative; transition:background .2s; padding:0; flex-shrink:0; }
+  .dev-wrap.off .dev-toggle { background:#D1D5DB; }
+  .dev-toggle::after { content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.2); transition:transform .2s; }
+  .dev-wrap:not(.off) .dev-toggle::after { transform:translateX(16px); }
 
   /* Blue rental widget override */
   :root { --teal:#0F766E; --teal-dim:#0D5F58; --teal-lt:#F0FDFA; }
@@ -593,7 +604,7 @@ const STYLE = `
 
   /* Dual CTA */
   .detail-dual-cta { display:flex; gap:8px; }
-  .detail-cta-chat { flex:1; padding:12px; border:1.5px solid var(--blue); background:#fff; color:var(--blue); border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--f); transition:all .15s; }
+  .detail-cta-chat { flex:1; padding:12px; border:1.5px solid var(--blue); background:#fff; color:var(--blue); border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--f); transition:all .15s; white-space:nowrap; }
   .detail-cta-chat:hover { background:var(--blue-lt); }
   .detail-cta-pay { flex:1.4; padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--f); transition:all .15s; }
   .detail-cta-pay:hover { background:var(--blue-dim); }
@@ -856,7 +867,7 @@ const SPACES = [
 const ITEMS = [
   {id:'i1',cat:'camping',img:'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=200&q=80',name:'4인용 캠핑 텐트',meta:'1박 · 후기 8개',price:'12,000',unit:'원/일',badges:[{cls:'hot',label:'인기'}]},
   {id:'i2',cat:'tools',img:'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=200&q=80',name:'18V 전동 드릴 세트',meta:'1일 · 후기 3개',price:'5,000',unit:'원/일',badges:[{cls:'new',label:'NEW'}]},
-  {id:'i3',cat:'electronics',img:'https://images.unsplash.com/photo-1626379801357-537572c4c4ab?w=200&q=80',name:'휴대용 빔프로젝터',meta:'1박 · 후기 21개',price:'10,000',unit:'원/일',badges:[{cls:'hot',label:'인기'}]},
+  {id:'i3',cat:'electronics',img:'https://images.unsplash.com/photo-1478144592103-25e218a04891?w=200&q=80',name:'휴대용 빔프로젝터',meta:'1박 · 후기 21개',price:'10,000',unit:'원/일',badges:[{cls:'hot',label:'인기'}]},
   {id:'i4',cat:'transport',img:'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=200&q=80',name:'성인 자전거',meta:'1일 · 후기 5개',price:'8,000',unit:'원/일',badges:[{cls:'safe',label:'보험적용'}]},
   {id:'i5',cat:'camping',img:'https://images.unsplash.com/photo-1533130061792-64b345e4a833?w=200&q=80',name:'캠핑 버너 세트',meta:'1일 · 후기 6개',price:'4,000',unit:'원/일',badges:[{cls:'new',label:'NEW'}]},
   {id:'i6',cat:'sports',img:'https://images.unsplash.com/photo-1547447134-cd3f5c716030?w=200&q=80',name:'스노우보드 세트',meta:'1일 · 후기 15개',price:'25,000',unit:'원/일',badges:[{cls:'hot',label:'인기'}]},
@@ -900,21 +911,21 @@ const SPACE_PHOTOS = {
 const ITEM_PHOTOS = {
   i1:['https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80','https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=400&q=80','https://images.unsplash.com/photo-1537565266759-34bf2a3b4b72?w=400&q=80','https://images.unsplash.com/photo-1520987799-96f17ce79673?w=400&q=80'],
   i2:['https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80','https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80','https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80','https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=400&q=80'],
-  i3:['https://images.unsplash.com/photo-1626379801357-537572c4c4ab?w=400&q=80','https://images.unsplash.com/photo-1588274454707-7b4fc0a6b3f8?w=400&q=80','https://images.unsplash.com/photo-1585338447937-7082f8fc763d?w=400&q=80','https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&q=80'],
+  i3:['https://images.unsplash.com/photo-1478144592103-25e218a04891?w=400&q=80','https://images.unsplash.com/photo-1588274454707-7b4fc0a6b3f8?w=400&q=80','https://images.unsplash.com/photo-1585338447937-7082f8fc763d?w=400&q=80','https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&q=80'],
   i4:['https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80','https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=400&q=80','https://images.unsplash.com/photo-1576435728678-68d0fbf94946?w=400&q=80'],
 };
 const getItemPhotos = (id) => ITEM_PHOTOS[id] || ITEM_PHOTOS.i1;
 const getSpacePhotos = (id) => SPACE_PHOTOS[id] || SPACE_PHOTOS.s1;
 const SPACE_HOST_DATA = {
-  s1:{name:'김다은',avatar:'김',rating:'4.8',years:'1년+',address:'천안시 동남구 안서동 153-2',addressDetail:'301호 (정문에서 도보 2분)',times:['10:00','11:00','14:00','15:00','16:00'],unavail:new Set([3,7,8,14,15,21,22])},
-  s2:{name:'박서연',avatar:'박',rating:'4.9',years:'2년+',address:'천안시 동남구 안서동 91',addressDetail:'1층 창고 (주차장 옆)',times:['09:00','10:00','11:00','13:00','14:00','15:00','16:00'],unavail:new Set([1,2,5,12,19,25,26])},
+  s1:{name:'강석진',avatar:'강',rating:'4.8',years:'1년+',address:'천안시 동남구 안서동 153-2',addressDetail:'301호 (정문에서 도보 2분)',times:['10:00','11:00','14:00','15:00','16:00'],unavail:new Set([3,7,8,14,15,21,22])},
+  s2:{name:'방준서',avatar:'방',rating:'4.9',years:'2년+',address:'천안시 동남구 안서동 91',addressDetail:'1층 창고 (주차장 옆)',times:['09:00','10:00','11:00','13:00','14:00','15:00','16:00'],unavail:new Set([1,2,5,12,19,25,26])},
 };
 const getSpaceHost = (id) => SPACE_HOST_DATA[id] || SPACE_HOST_DATA.s1;
 const ITEM_OWNER_DATA = {
-  i1:{name:'박서연',avatar:'박',rating:'4.9',trades:12,location:'안서동',times:['10:00','11:00','14:00','15:00'],unavail:new Set([5,6,12,13,19,20])},
-  i2:{name:'김지호',avatar:'김',rating:'4.7',trades:8,location:'쌍용동',times:['09:00','13:00','17:00'],unavail:new Set([3,10,17,24])},
-  i3:{name:'이민준',avatar:'이',rating:'4.9',trades:21,location:'두정동',times:['11:00','14:00','15:00','16:00'],unavail:new Set([1,2,7,8])},
-  i4:{name:'정수아',avatar:'정',rating:'4.8',trades:5,location:'안서동',times:['09:00','10:00','11:00'],unavail:new Set([4,5,11,18,25])},
+  i1:{name:'신동준',avatar:'신',rating:'4.9',trades:12,location:'안서동',times:['10:00','11:00','14:00','15:00'],unavail:new Set([5,6,12,13,19,20])},
+  i2:{name:'김윤중',avatar:'김',rating:'4.7',trades:8,location:'쌍용동',times:['09:00','13:00','17:00'],unavail:new Set([3,10,17,24])},
+  i3:{name:'강석진',avatar:'강',rating:'4.9',trades:21,location:'두정동',times:['11:00','14:00','15:00','16:00'],unavail:new Set([1,2,7,8])},
+  i4:{name:'방준서',avatar:'방',rating:'4.8',trades:5,location:'안서동',times:['09:00','10:00','11:00'],unavail:new Set([4,5,11,18,25])},
 };
 const getItemOwner = (id) => ITEM_OWNER_DATA[id] || ITEM_OWNER_DATA.i1;
 const BOOKING_PERIODS = ['1일','3일','1주일','2주일','1개월','3개월','6개월+'];
@@ -986,10 +997,10 @@ function BottomTab({ active, onNavigate }) {
   );
 }
 
-function SpaceCard({ space, index, isFav, onToggleFav }) {
+function SpaceCard({ space, index, isFav, onToggleFav, onOpen }) {
   const {id,img,name,meta,price,unit,badges} = space;
   return (
-    <div className={`space-item fu d${Math.min(index+1,5)}`}>
+    <div className={`space-item fu d${Math.min(index+1,5)}`} onClick={onOpen} style={{cursor:onOpen?'pointer':undefined}}>
       <img src={img} alt={name} className="space-thumb"/>
       <div className="space-info">
         <div className="space-name">{name}</div>
@@ -1062,6 +1073,7 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
   const [showReturn, setShowReturn] = useState(false);
   const [showMsg, setShowMsg] = useState(false);
   const [msgText, setMsgText] = useState('');
+  const [devEnabled, setDevEnabled] = useState(true);
   useEffect(() => {
     if (rentals.length === 0) return;
     const t = setInterval(() => setNow(Date.now()), 1000);
@@ -1086,7 +1098,6 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
     <button className="home-search" onClick={()=>onNavigate('search')} aria-label="검색">
       <IconSearch/>
       <span className="home-search-text">어떤 공간을 찾으시나요?</span>
-      <span className="home-search-kbd">⌘ K</span>
     </button>
   );
   return (
@@ -1094,13 +1105,17 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
       <div className="top-bar fu">
         <span className="logo">도와주오</span>
         <div className="top-icons">
-          <button className="icon-btn dev-btn" aria-label="빌린 상품 추가 (개발자)" title="빌린 상품 추가 (개발자)" onClick={addDevRental}>
-            <IconCode/>
-          </button>
+          <div className={`dev-wrap${devEnabled?'':' off'}`}>
+            <button className="dev-icon-btn" aria-label="대여 추가" onClick={()=>{ if(devEnabled) addDevRental(); }} title="대여 아이템 추가">
+              <IconCode/>
+            </button>
+            <span className="dev-wrap-label">개발자 기능</span>
+            <button className="dev-toggle" aria-label="개발자 기능 토글" onClick={()=>setDevEnabled(v=>!v)}/>
+          </div>
           <button className="icon-btn" aria-label="알림"><IconBell/></button>
         </div>
       </div>
-      {active ? (
+      {active && devEnabled ? (
         <div className="rental-wrap fu">
           <div className="rental-status blue">
             <div className="rental-main">
@@ -1122,7 +1137,7 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
       )}
       <div className="scroll">
         <AdCarousel/>
-        {active && (
+        {active && devEnabled && (
           <div className="home-search-wrap fu" style={{padding:'8px 16px 4px'}}>{searchBar}</div>
         )}
         <div className="big-cat-row fu d2">
@@ -1140,29 +1155,10 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
           </button>
         </div>
         <div className="featured-head fu d3">
-          <span className="featured-title">이런 물건 어때요?</span>
-          <button className="featured-more" onClick={()=>onNavigate('share-list')}>전체보기 <ChevR/></button>
-        </div>
-        <div className="featured-scroll fu d3">
-          {ITEMS.map((item) => (
-            <button key={item.id} className="featured-card" onClick={()=>onOpenItem(item)}>
-              <img src={item.img} alt={item.name} className="featured-img"/>
-              <div className="featured-info">
-                <div className="featured-name">{item.name}</div>
-                <div className="featured-meta">{item.meta.split(' · ').slice(0,2).join(' · ')}</div>
-                <div className="featured-price">{item.price}<small>{item.unit}</small></div>
-                <div className="featured-badges">
-                  {item.badges.map(({cls,label}) => <span key={label} className={`badge ${cls}`}>{label}</span>)}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-        <div className="featured-head fu d4">
           <span className="featured-title">이런 공간 어때요?</span>
           <button className="featured-more" onClick={()=>onNavigate('list')}>전체보기 <ChevR/></button>
         </div>
-        <div className="featured-scroll fu d4">
+        <div className="featured-scroll fu d3">
           {SPACES.map((space) => (
             <button key={space.id} className="featured-card" onClick={()=>onOpenSpace(space)}>
               <img src={space.img} alt={space.name} className="featured-img"/>
@@ -1176,6 +1172,31 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
               </div>
             </button>
           ))}
+        </div>
+        <div className="featured-head fu d4">
+          <span className="featured-title">이런 물건 어때요?</span>
+          <button className="featured-more" onClick={()=>onNavigate('share-list')}>전체보기 <ChevR/></button>
+        </div>
+        <div className="featured-scroll fu d4">
+          {ITEMS.slice(0,2).map((item) => (
+            <button key={item.id} className="featured-card" onClick={()=>onOpenItem(item)}>
+              <img src={item.img} alt={item.name} className="featured-img"/>
+              <div className="featured-info">
+                <div className="featured-name">{item.name}</div>
+                <div className="featured-meta">{item.meta.split(' · ').slice(0,2).join(' · ')}</div>
+                <div className="featured-price">{item.price}<small>{item.unit}</small></div>
+                <div className="featured-badges">
+                  {item.badges.map(({cls,label}) => <span key={label} className={`badge ${cls}`}>{label}</span>)}
+                </div>
+              </div>
+            </button>
+          ))}
+          <button className="featured-card featured-more-card" onClick={()=>onNavigate('share-list')}>
+            <div className="featured-more-inner">
+              <span className="featured-more-count">+{ITEMS.length - 2}</span>
+              <span className="featured-more-label">더보기</span>
+            </div>
+          </button>
         </div>
       </div>
       <BottomTab active="home" onNavigate={onNavigate}/>
@@ -1354,7 +1375,7 @@ function FormView({ onBack, onNext }) {
   );
 }
 
-function ListView({ onBack, favorites, onToggleFav }) {
+function ListView({ onBack, favorites, onToggleFav, onOpenSpace, onNavigate }) {
   return (
     <>
       <div className="back-bar sr">
@@ -1370,18 +1391,15 @@ function ListView({ onBack, favorites, onToggleFav }) {
       <div className="scroll">
         <div className="space-list">
           {SPACES.map((space,i)=>(
-            <SpaceCard key={space.id} space={space} index={i} isFav={favorites.has(space.id)} onToggleFav={onToggleFav}/>
+            <SpaceCard key={space.id} space={space} index={i} isFav={favorites.has(space.id)} onToggleFav={onToggleFav} onOpen={()=>onOpenSpace(space)}/>
           ))}
         </div>
-      </div>
-      <div className="cta-area">
-        <button className="cta-btn">공간 등록하고 수익 내기 <ArrowR/></button>
       </div>
     </>
   );
 }
 
-function FavoritesView({ onNavigate, favorites, onToggleFav }) {
+function FavoritesView({ onNavigate, favorites, onToggleFav, onOpenSpace }) {
   const favSpaces = SPACES.filter(s=>favorites.has(s.id));
   return (
     <>
@@ -1403,7 +1421,7 @@ function FavoritesView({ onNavigate, favorites, onToggleFav }) {
           <div className="scroll">
             <div className="space-list">
               {favSpaces.map((space,i)=>(
-                <SpaceCard key={space.id} space={space} index={i} isFav={true} onToggleFav={onToggleFav}/>
+                <SpaceCard key={space.id} space={space} index={i} isFav={true} onToggleFav={onToggleFav} onOpen={()=>onOpenSpace(space)}/>
               ))}
             </div>
           </div>
@@ -1414,7 +1432,7 @@ function FavoritesView({ onNavigate, favorites, onToggleFav }) {
   );
 }
 
-function SearchView({ onBack, favorites, onToggleFav }) {
+function SearchView({ onBack, favorites, onToggleFav, onOpenSpace }) {
   const [query, setQuery] = useState('');
   const [recents, setRecents] = useState(['원룸 보관','안서동','캠핑용품']);
   const q = query.trim().toLowerCase();
@@ -1501,7 +1519,7 @@ function SearchView({ onBack, favorites, onToggleFav }) {
               <p className="result-info fu"><strong>{results.length}개</strong>의 공간을 찾았어요</p>
               <div className="space-list">
                 {results.map((space,i)=>(
-                  <SpaceCard key={space.id} space={space} index={i} isFav={favorites.has(space.id)} onToggleFav={onToggleFav}/>
+                  <SpaceCard key={space.id} space={space} index={i} isFav={favorites.has(space.id)} onToggleFav={onToggleFav} onOpen={()=>onOpenSpace(space)}/>
                 ))}
               </div>
             </>
@@ -1512,7 +1530,7 @@ function SearchView({ onBack, favorites, onToggleFav }) {
   );
 }
 
-const SPACE_HOSTS = ['김다은','박서연','이민준','정수아'];
+const SPACE_HOSTS = ['강석진','방준서','신동준','김윤중'];
 const SPACE_DESCRIPTIONS = {
   s1: '깨끗하게 관리되고 있는 원룸의 빈 방으로, 박스 5~6개 정도 보관 가능합니다. 도어락 보안과 자유로운 출입으로 안심하고 맡기실 수 있어요.',
   s2: '24시간 CCTV가 설치된 안전한 창고 공간입니다. 대형 짐도 충분히 보관 가능하며, 소액 보험이 자동 적용되어 분쟁 발생 시에도 보호됩니다.',
@@ -1594,7 +1612,7 @@ function SpaceDetailView({ space, onBack, isFav, onToggleFav, onNavigate }) {
             <div className="review-item">
               <div className="review-head">
                 <span className="review-rating">★★★★★</span>
-                <span className="review-author">이민준</span>
+                <span className="review-author">신동준</span>
                 <span className="review-time">2주 전</span>
               </div>
               <p className="review-text">위치도 좋고 가격도 합리적입니다. 다음에 또 이용할게요.</p>
@@ -1602,7 +1620,7 @@ function SpaceDetailView({ space, onBack, isFav, onToggleFav, onNavigate }) {
             <div className="review-item">
               <div className="review-head">
                 <span className="review-rating">★★★★☆</span>
-                <span className="review-author">정수아</span>
+                <span className="review-author">김윤중</span>
                 <span className="review-time">3주 전</span>
               </div>
               <p className="review-text">공간 자체는 만족스러웠어요. 다만 처음 찾을 때 길 안내가 조금 헷갈렸어요.</p>
@@ -1627,7 +1645,7 @@ function SpaceDetailView({ space, onBack, isFav, onToggleFav, onNavigate }) {
   );
 }
 
-const ITEM_OWNERS = ['박서연','김지호','이민준','정수아','최우진'];
+const ITEM_OWNERS = ['신동준','김윤중','강석진','방준서','김다은'];
 const ITEM_DESC = {
   i1: '주말 캠핑이나 여행에 적합한 4인용 텐트입니다. 설치가 간단하고 방수 처리되어 우천 시에도 사용할 수 있어요. 폴, 페그, 수납 가방이 모두 포함됩니다.',
   i2: '18V 무선 전동 드릴 세트입니다. 가구 조립, 벽걸이 설치 등 가벼운 DIY에 충분한 성능. 다양한 비트와 충전기 포함.',
@@ -1711,7 +1729,7 @@ function ItemDetailView({ item, onBack, isFav, onToggleFav, onNavigate }) {
             <div className="review-item">
               <div className="review-head">
                 <span className="review-rating">★★★★★</span>
-                <span className="review-author">이민준</span>
+                <span className="review-author">강석진</span>
                 <span className="review-time">1주 전</span>
               </div>
               <p className="review-text">설명대로 잘 작동하고 사용법도 친절히 알려주셨어요. 추천합니다.</p>
@@ -1719,7 +1737,7 @@ function ItemDetailView({ item, onBack, isFav, onToggleFav, onNavigate }) {
             <div className="review-item">
               <div className="review-head">
                 <span className="review-rating">★★★★☆</span>
-                <span className="review-author">정수아</span>
+                <span className="review-author">방준서</span>
                 <span className="review-time">2주 전</span>
               </div>
               <p className="review-text">가격 대비 만족도가 높아요. 다만 보증금 환급이 살짝 늦었네요.</p>
@@ -1848,9 +1866,9 @@ function RegisterView({ onBack, initialType = 'space' }) {
 
 const COMMUNITY_POSTS = [
   {id:'p1', author:'김다은', avatar:'김', time:'2시간 전', cat:'review', catLabel:'후기', title:'백석대 앞 원룸 보관 후기', excerpt:'겨울 옷 3박스를 한 달 맡겼는데 사진 검증 덕분에 깔끔하게 받았어요. 호스트님도 친절하셔서 강추합니다!', likes:12, comments:3},
-  {id:'p2', author:'이민준', avatar:'이', time:'5시간 전', cat:'qna', catLabel:'질문', title:'캐리어 1박만 맡길 곳 있을까요?', excerpt:'다음 주 출장인데 짧게 하루만 캐리어 보관할 수 있는 곳을 찾고 있어요. 천안 지역이면 좋을 것 같습니다.', likes:5, comments:8},
-  {id:'p3', author:'박서연', avatar:'박', time:'어제', cat:'tip', catLabel:'팁', title:'분쟁 없이 인수받는 5가지 팁', excerpt:'AI 사진 검증을 잘 활용하는 방법, 사전 협의 체크리스트, 인수 시 꼭 확인해야 할 것들을 정리해봤어요.', likes:42, comments:11},
-  {id:'p4', author:'최우진', avatar:'최', time:'2일 전', cat:'news', catLabel:'소식', title:'천안 안서동 신규 공간 5곳 오픈', excerpt:'대학가 중심으로 새로운 보관 공간들이 늘어나고 있어요. 모두 보험 적용 가능합니다.', likes:18, comments:2},
+  {id:'p2', author:'강석진', avatar:'강', time:'5시간 전', cat:'qna', catLabel:'질문', title:'캐리어 1박만 맡길 곳 있을까요?', excerpt:'다음 주 출장인데 짧게 하루만 캐리어 보관할 수 있는 곳을 찾고 있어요. 천안 지역이면 좋을 것 같습니다.', likes:5, comments:8},
+  {id:'p3', author:'방준서', avatar:'방', time:'어제', cat:'tip', catLabel:'팁', title:'분쟁 없이 인수받는 5가지 팁', excerpt:'AI 사진 검증을 잘 활용하는 방법, 사전 협의 체크리스트, 인수 시 꼭 확인해야 할 것들을 정리해봤어요.', likes:42, comments:11},
+  {id:'p4', author:'신동준', avatar:'신', time:'2일 전', cat:'news', catLabel:'소식', title:'천안 안서동 신규 공간 5곳 오픈', excerpt:'대학가 중심으로 새로운 보관 공간들이 늘어나고 있어요. 모두 보험 적용 가능합니다.', likes:18, comments:2},
 ];
 
 const COMMUNITY_FILTERS = [['전체','all'],['후기','review'],['질문','qna'],['팁','tip'],['소식','news']];
@@ -2368,6 +2386,7 @@ function StorePaymentView({ space, booking, onBack, onDone }) {
 }
 
 function HostRegisterView({ onBack, onDone }) {
+  const [done, setDone] = useState(false);
   const [cat, setCat] = useState('');
   const [name, setName] = useState('');
   const [addr, setAddr] = useState('');
@@ -2389,6 +2408,20 @@ function HostRegisterView({ onBack, onDone }) {
     if(n.has(d)) n.delete(d); else n.add(d);
     return n;
   });
+  if (done) return (
+    <>
+      <div className="back-bar sr">
+        <button className="back-btn" onClick={onDone} aria-label="홈으로"><ChevL/></button>
+        <span className="page-title">등록 완료</span>
+      </div>
+      <div className="pay2-success">
+        <div className="pay2-success-icon">✓</div>
+        <div className="pay2-success-title">공간 등록이 완료됐어요!</div>
+        <div className="pay2-success-sub">관리자 검수 후 24시간 이내 게시됩니다.<br/>이웃들이 곧 내 공간을 만날 거예요.</div>
+        <button className="pay2-cta" onClick={onDone}>홈으로</button>
+      </div>
+    </>
+  );
   return (
     <>
       <div className="back-bar sr">
@@ -2485,7 +2518,7 @@ function HostRegisterView({ onBack, onDone }) {
         </div>
       </div>
       <div className="pay2-bottom">
-        <button className="pay2-cta" onClick={onDone}>공간 등록하기</button>
+        <button className="pay2-cta" onClick={()=>setDone(true)}>공간 등록하기</button>
       </div>
     </>
   );
@@ -2738,6 +2771,7 @@ function ItemPaymentView({ item, booking, onBack, onDone }) {
 }
 
 function ItemRegisterView({ onBack, onDone }) {
+  const [done, setDone] = useState(false);
   const [cat, setCat] = useState('');
   const [name, setName] = useState('');
   const [cond, setCond] = useState('');
@@ -2745,6 +2779,20 @@ function ItemRegisterView({ onBack, onDone }) {
   const [desc, setDesc] = useState('');
   const PMIN=1000, PMAX=50000, PSTEP=1000;
   const pct = ((price-PMIN)/(PMAX-PMIN))*100;
+  if (done) return (
+    <>
+      <div className="back-bar sr">
+        <button className="back-btn" onClick={onDone} aria-label="홈으로"><ChevL/></button>
+        <span className="page-title">등록 완료</span>
+      </div>
+      <div className="pay2-success pay2-teal">
+        <div className="pay2-success-icon" style={{background:'var(--teal-lt)',color:'var(--teal)'}}>✓</div>
+        <div className="pay2-success-title">물건 등록이 완료됐어요!</div>
+        <div className="pay2-success-sub">관리자 검수 후 24시간 이내 게시됩니다.<br/>이웃들이 곧 내 물건을 만날 거예요.</div>
+        <button className="pay2-cta" style={{background:'var(--teal)'}} onClick={onDone}>홈으로</button>
+      </div>
+    </>
+  );
   return (
     <>
       <div className="back-bar sr">
@@ -2812,7 +2860,7 @@ function ItemRegisterView({ onBack, onDone }) {
         </div>
       </div>
       <div className="pay2-bottom" style={{borderTop:'1px solid var(--line)',background:'#fff'}}>
-        <button className="ireg-cta" onClick={onDone}>물건 등록하기</button>
+        <button className="ireg-cta" onClick={()=>setDone(true)}>물건 등록하기</button>
       </div>
     </>
   );
@@ -2850,11 +2898,11 @@ export default function App() {
         {view==='item-detail' && <ItemDetailView item={selectedItem} onBack={goBack} isFav={selectedItem ? favorites.has(selectedItem.id) : false} onToggleFav={toggleFav} onNavigate={navigate}/>}
         {view==='space-detail' && <SpaceDetailView space={selectedSpace} onBack={goBack} isFav={selectedSpace ? favorites.has(selectedSpace.id) : false} onToggleFav={toggleFav} onNavigate={navigate}/>}
         {view==='form' && <FormView onBack={goBack} onNext={()=>navigate('list')}/>}
-        {view==='list' && <ListView onBack={goBack} favorites={favorites} onToggleFav={toggleFav}/>}
-        {view==='favorites' && <FavoritesView onNavigate={navigate} favorites={favorites} onToggleFav={toggleFav}/>}
+        {view==='list' && <ListView onBack={goBack} favorites={favorites} onToggleFav={toggleFav} onOpenSpace={openSpace} onNavigate={navigate}/>}
+        {view==='favorites' && <FavoritesView onNavigate={navigate} favorites={favorites} onToggleFav={toggleFav} onOpenSpace={openSpace}/>}
         {view==='history' && <HistoryView onNavigate={navigate} onBack={goBack}/>}
         {view==='mypage' && <MyPageView onNavigate={navigate} favorites={favorites}/>}
-        {view==='search' && <SearchView onBack={goBack} favorites={favorites} onToggleFav={toggleFav}/>}
+        {view==='search' && <SearchView onBack={goBack} favorites={favorites} onToggleFav={toggleFav} onOpenSpace={openSpace}/>}
         {view==='map' && <MapView onNavigate={navigate}/>}
         {view==='community' && <CommunityView onNavigate={navigate} verified={neighborhoodVerified} onVerify={()=>setNeighborhoodVerified(true)}/>}
         {view==='register' && <RegisterView onBack={goBack}/>}
