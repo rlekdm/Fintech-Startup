@@ -524,17 +524,13 @@ const STYLE = `
   .rental-btn:active { transform:scale(.97); }
   .rental-btn.primary { background:#EA580C; color:#fff; border-color:#EA580C; }
   .rental-btn.primary:hover { background:#C2410C; border-color:#C2410C; }
-  .dev-wrap { display:flex; align-items:center; gap:6px; background:var(--blue-lt); border:1.5px solid #BFDBFE; border-radius:12px; padding:5px 8px 5px 6px; transition:all .14s; }
-  .dev-wrap.off { background:#F3F4F6; border-color:#E5E7EB; }
-  .dev-wrap-label { font-size:10px; font-weight:800; color:var(--blue); letter-spacing:-.01em; white-space:nowrap; }
-  .dev-wrap.off .dev-wrap-label { color:#9CA3AF; }
-  .dev-icon-btn { width:28px; height:28px; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--blue); padding:0; }
-  .dev-wrap.off .dev-icon-btn { color:#9CA3AF; }
-  .dev-icon-btn svg { width:16px; height:16px; stroke-width:2.2; }
-  .dev-toggle { width:34px; height:18px; border-radius:9px; background:var(--blue); border:none; cursor:pointer; position:relative; transition:background .2s; padding:0; flex-shrink:0; }
-  .dev-wrap.off .dev-toggle { background:#D1D5DB; }
-  .dev-toggle::after { content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.2); transition:transform .2s; }
-  .dev-wrap:not(.off) .dev-toggle::after { transform:translateX(16px); }
+  .dev-btn { width:44px; height:44px; border-radius:12px; color:var(--blue); background:var(--blue-lt); border:1.5px solid #BFDBFE; position:relative; transition:all .14s; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .dev-btn svg { width:22px; height:22px; stroke-width:2.2; }
+  .dev-btn::after { content:"DEV"; position:absolute; top:-4px; right:-4px; font-size:8px; font-weight:900; color:#fff; background:var(--blue); padding:2px 4px; border-radius:5px; letter-spacing:.06em; box-shadow:0 2px 4px rgba(37,99,235,.3); }
+  .dev-btn:hover { background:#DBEAFE; border-color:var(--blue); }
+  .dev-btn:active { transform:scale(.94); }
+  .dev-btn.off { color:#9CA3AF; background:#F3F4F6; border-color:#E5E7EB; }
+  .dev-btn.off::after { content:"OFF"; background:#9CA3AF; box-shadow:none; }
 
   /* Blue rental widget override */
   :root { --teal:#0F766E; --teal-dim:#0D5F58; --teal-lt:#F0FDFA; }
@@ -1067,33 +1063,33 @@ function AdCarousel() {
 const DEV_RENTAL_ITEMS = ['전동 드릴','캠핑 텐트','자전거 펌프','아이 카시트','4인용 그릴','휴대용 빔프로젝터'];
 
 function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
-  const [rentals, setRentals] = useState([]);
+  const [devEnabled, setDevEnabled] = useState(false);
+  const [untilMs, setUntilMs] = useState(0);
   const [now, setNow] = useState(Date.now());
   const [showExtend, setShowExtend] = useState(false);
   const [showReturn, setShowReturn] = useState(false);
   const [showMsg, setShowMsg] = useState(false);
   const [msgText, setMsgText] = useState('');
-  const [devEnabled, setDevEnabled] = useState(true);
+  const devItem = DEV_RENTAL_ITEMS[0];
   useEffect(() => {
-    if (rentals.length === 0) return;
+    if (!devEnabled) return;
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
-  }, [rentals.length]);
-  useEffect(() => {
-    setRentals(prev => prev.filter(r => r.untilMs > now));
-  }, [now]);
-  const addDevRental = () => {
-    const name = DEV_RENTAL_ITEMS[Math.floor(Math.random()*DEV_RENTAL_ITEMS.length)];
-    const mins = Math.floor(Math.random()*55) + 5;
-    setRentals([{id:Date.now(), name, untilMs:Date.now() + mins*60*1000}]);
+  }, [devEnabled]);
+  const toggleDev = () => {
+    if (!devEnabled) {
+      const ms = Date.now() + 30 * 60 * 1000;
+      setUntilMs(ms);
+      setNow(Date.now());
+    }
+    setDevEnabled(v => !v);
   };
   const extendRental = (mins) => {
-    setRentals(prev => prev.map((r,i) => i===0 ? {...r, untilMs: Math.max(r.untilMs, Date.now()) + mins*60*1000} : r));
+    setUntilMs(prev => Math.max(prev, Date.now()) + mins * 60 * 1000);
     setShowExtend(false);
   };
-  const returnRental = () => { setRentals([]); setShowReturn(false); };
-  const active = rentals[0];
-  const remainingMin = active ? Math.max(0, Math.ceil((active.untilMs - now)/60000)) : 0;
+  const returnRental = () => { setDevEnabled(false); setShowReturn(false); };
+  const remainingMin = devEnabled ? Math.max(0, Math.ceil((untilMs - now) / 60000)) : 0;
   const searchBar = (
     <button className="home-search" onClick={()=>onNavigate('search')} aria-label="검색">
       <IconSearch/>
@@ -1105,23 +1101,19 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
       <div className="top-bar fu">
         <span className="logo">도와주오</span>
         <div className="top-icons">
-          <div className={`dev-wrap${devEnabled?'':' off'}`}>
-            <button className="dev-icon-btn" aria-label="대여 추가" onClick={()=>{ if(devEnabled) addDevRental(); }} title="대여 아이템 추가">
-              <IconCode/>
-            </button>
-            <span className="dev-wrap-label">개발자 기능</span>
-            <button className="dev-toggle" aria-label="개발자 기능 토글" onClick={()=>setDevEnabled(v=>!v)}/>
-          </div>
+          <button className={`dev-btn${devEnabled?'':' off'}`} onClick={toggleDev} aria-label="dev mode 토글">
+            <IconCode/>
+          </button>
           <button className="icon-btn" aria-label="알림"><IconBell/></button>
         </div>
       </div>
-      {active && devEnabled ? (
+      {devEnabled ? (
         <div className="rental-wrap fu">
           <div className="rental-status blue">
             <div className="rental-main">
               <span className="rental-ic"><IconClock/></span>
               <div className="rental-info">
-                <div className="rental-name">{active.name}</div>
+                <div className="rental-name">{devItem}</div>
                 <div className="rental-sub">대여 중</div>
               </div>
               <span className="rental-time">{remainingMin}<small>분 남음</small></span>
@@ -1137,7 +1129,7 @@ function HomeView({ onNavigate, onOpenItem, onOpenSpace }) {
       )}
       <div className="scroll">
         <AdCarousel/>
-        {active && devEnabled && (
+        {devEnabled && (
           <div className="home-search-wrap fu" style={{padding:'8px 16px 4px'}}>{searchBar}</div>
         )}
         <div className="big-cat-row fu d2">
